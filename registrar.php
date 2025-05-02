@@ -1,24 +1,24 @@
 <?php
 include_once ("conex.php");
+var_dump($_POST);
 
-// Validar y sanitizar entradas
-$codigo = mysqli_real_escape_string($conn, $_POST["codigo"]);
-$dni = mysqli_real_escape_string($conn, $_POST["dni"]);
-$nombre = mysqli_real_escape_string($conn, $_POST["nombre"]);
-$apellido = mysqli_real_escape_string($conn, $_POST["apellido"]);
-$token = mysqli_real_escape_string($conn, $_POST["token"]);
+$codigo = $_POST["codigo"];  
+$dni = $_POST["dni"];  
+$nombre = $_POST["nombre"];  
+$apellido = $_POST["apellido"];
+$token = $_POST["token"];  
 
-// Usar consultas preparadas
-$stmt = $conn->prepare("INSERT INTO usuarios (`code_uni`, `dni`, `nombres`, `apellidos`, `token`, `fecha_registro`) VALUES (?, ?, ?, ?, ?, current_timestamp())");
-$stmt->bind_param("sssss", $codigo, $dni, $nombre, $apellido, $token);
+$insert_user = "INSERT INTO usuarios (`id`, `code_uni`, `dni`, `nombres`, `apellidos`, `token`, `fecha_registro`) 
+VALUES (NULL, '$codigo', '$dni', '$nombre', '$apellido', '$token', current_timestamp())";
+print($insert_user);
 
-if ($stmt->execute()) {
+if(mysqli_query($conn,$insert_user)){
+    #echo "New record created successfully";
     header('Location: ./ver_alumnos.php');
-} else {
-    echo "Error: " . $stmt->error;
+}else{
+    echo "Error: " . $sql . "<br>" . mysqli_error($conn);
 }
 
-$stmt->close();
-$conn->close();
-?>
 
+#    $nrows = mysqli_num_rows($result_select_user);
+#    print($nrows);
